@@ -1,0 +1,5 @@
+# Artefatos temporarios; logs finais sao copiados para docs/reports/evidencias/
+build/
+*.vcd
+*.vvp
+.DS_Store
