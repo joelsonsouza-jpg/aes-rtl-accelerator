@@ -2,8 +2,8 @@
 
 **Projeto:** Acelerador AES com interface SPI e baixo consumo  
 **Trilha:** RTL Design  
-**Etapa:** Semana 1 — Kick-off, estudo e ambiente  
-**Responsável:** Joelson Souza  
+**Etapa:** Semana 1 — Estudo e ambiente  
+**Responsável:** Joelson Silva de Souza  
 **Data:** 09/10/2026
 
 ## 1. Introdução
