@@ -1,24 +1,94 @@
-.PHONY: all test clean help
 
-# Configuracoes
-SHELL := /bin/bash
-BUILD_DIR := build
+# ==========================================
+# Projeto AES RTL - Semana 01
+# ==========================================
 
-# Fluxo completo: lint, compilacao e simulacao
-all: test
+# ==========================================
+# Diretorios
+# ==========================================
+RTL_DIR   = rtl
+TB_DIR    = tb
+BUILD_DIR = build
+SYNTH_DIR = syn
 
-test:
-	@bash scripts/run.sh
+# ==========================================
+# Arquivos RTL
+# ==========================================
+RTL_FILES = \
+	$(RTL_DIR)/counter_demo.sv
 
-# Remove os arquivos gerados
-clean:
-	@echo "Limpando arquivos de compilacao..."
-	@rm -rf $(BUILD_DIR)
+TB_FILES = \
+	$(TB_DIR)/tb_counter_demo.sv
 
-# Mostra os comandos disponiveis
+# ==========================================
+# Top do testbench
+# ==========================================
+TOP = tb_counter_demo
+
+# ==========================================
+# Flags
+# ==========================================
+TIMESCALE = 1ns/1ps
+
+VLOGAN_FLAGS = -full64 \
+               -sverilog \
+               -kdb \
+               +lint=all
+
+VCS_FLAGS = -full64 \
+            -timescale=$(TIMESCALE) \
+            -kdb
+
+# ==========================================
+# Fluxo principal
+# ==========================================
+all: run
+
+# ==========================================
+# Verificacao de sintaxe e lint
+# ==========================================
+syntax:
+	mkdir -p $(BUILD_DIR)
+	cd $(BUILD_DIR) && vlogan $(VLOGAN_FLAGS) \
+		../$(RTL_FILES) \
+		../$(TB_FILES) \
+		-l syntax.log
+
+# ==========================================
+# Compilacao / Elaboracao
+# ==========================================
+compile: syntax
+	cd $(BUILD_DIR) && vcs $(VCS_FLAGS) \
+		-top $(TOP) \
+		-o simv \
+		-l compile.log
+
+# ==========================================
+# Simulacao
+# ==========================================
+run: compile
+	cd $(BUILD_DIR) && ./simv -no_save -l simulation.log
+	grep -q "PASS: reset, contagem e enable validados." $(BUILD_DIR)/simulation.log
+
+# ==========================================
+# Limpeza da simulacao
+# ==========================================
+clean_sim:
+	rm -rf $(BUILD_DIR)
+
+# ==========================================
+# Limpeza total
+# ==========================================
+clean: clean_sim
+
+# ==========================================
+# Ajuda
+# ==========================================
 help:
-	@echo "Comandos disponiveis:"
-	@echo "  make       - Executa o fluxo completo"
-	@echo "  make test  - Executa lint, compilacao e simulacao"
-	@echo "  make clean - Remove arquivos gerados"
-	@echo "  make help  - Mostra esta ajuda"
+	@echo "make syntax    - Sintaxe e lint basico"
+	@echo "make compile   - Compilacao com VCS"
+	@echo "make run       - Executar simulacao"
+	@echo "make clean     - Limpar build"
+	@echo "make          - Executar fluxo completo"
+
+.PHONY: all syntax compile run clean_sim clean help

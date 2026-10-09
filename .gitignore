@@ -1,5 +1,36 @@
-# Artefatos temporarios; logs finais sao copiados para docs/reports/evidencias/
-build/
-*.vcd
-*.vvp
-.DS_Store
+# ==========================================
+# Artefatos Synopsys
+# ==========================================
+csrc/
+simv
+simv.daidir/
+*.daidir/
+ucli.key
+*.fsdb
+
+# ==========================================
+# PDK SAED32 e arquivos auxiliares
+# ==========================================
+SAED_PDK_32_28/
+saed32_has_been_loaded_here.txt
+FAQ
+README
+SOURCEME
+documentation/
+hercules/
+hspice/
+icv/
+lib.defs
+reference/
+starrc/
+sym_libs/
+
+# Scripts auxiliares do PDK
+scripts/callbacks/
+scripts/common/
+
+# Arquivos gerados durante a compilacao
+/build/
+
+# Script auxiliar do PDK
+/scripts/load_saed32.sh

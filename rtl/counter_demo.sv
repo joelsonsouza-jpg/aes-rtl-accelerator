@@ -1,4 +1,5 @@
 // Exemplo DIDATICO para validar o ambiente. NAO e o nucleo AES.
+`timescale 1ns/1ps
 module counter_demo (
     input  logic       clk_i,
     input  logic       rst_ni,
