@@ -1,49 +1,78 @@
 # Projeto Hands-on RTL — Acelerador AES/SPI
 
-## Semana 1 — ambiente de desenvolvimento
-Este repositório contém um **exemplo didático de contador**, apenas para validar o fluxo de lint, compilação e simulação. **Não contém implementação AES/SPI**, prevista para semanas posteriores.
+## 1. Descrição
 
-### Pré-requisitos (Ubuntu ou WSL2 Ubuntu)
-```bash
-sudo apt update
-sudo apt install -y git iverilog verilator
-```
+Este repositório faz parte do desenvolvimento de um acelerador criptográfico AES com interface SPI e estratégias de baixo consumo, na trilha RTL Design.
 
-### Executar em um comando
-Na raiz do projeto:
-```bash
-bash scripts/run.sh
-```
-Saída esperada: `PASS: reset, contagem e enable validados.` e `FLUXO MINIMO APROVADO.`
+Na Semana 1, o objetivo foi preparar o ambiente de desenvolvimento, organizar o repositório e validar o fluxo de análise de sintaxe, lint básico, compilação e simulação.
 
-### Resultados
-- `build/lint.log`: lint Verilator
-- `build/compile.log`: compilação Icarus Verilog
-- `build/simulation.log`: resultado dos testes
-- `build/counter_demo.vcd`: forma de onda (visualizável via GTKWave)
+**Nesta etapa, ainda não foram implementados o núcleo AES e a interface SPI.** Foi utilizado um contador digital em SystemVerilog como exemplo para validar as ferramentas.
 
-> `build/` é ignorado pelo Git. Copie evidências relevantes para `docs/reports/evidencias/`, quando executar o fluxo na sua máquina. Não declare testes realizados sem execução.
+## 2. Ambiente de desenvolvimento
 
-### Estrutura
-- `docs/spec/` especificação oficial **pendente** do instrutor
-- `docs/architecture/` arquitetura (Semana 2)
-- `docs/reports/` estudo, backlog, relatório semanal
-- `rtl/` RTL sintetizável (apenas exemplo mínimo nesta semana)
-- `tb/` testbenches
-- `models/` mocks PLL e memória (Semana 5/6)
-- `syn/`, `formal/`, `upf/` etapas posteriores
-- `scripts/` automação
+| Item | Configuração |
+|---|---|
+| Servidor | srv-microeletronica3 — UFCG |
+| Linguagem | SystemVerilog |
+| Ferramentas | Synopsys Vlogan e VCS |
+| Versão validada | X-2025.06-SP2_Full64 |
+| Automação | GNU Make |
+| Versionamento | Git e GitHub |
 
-### Primeiro commit e tag
-```bash
-git init
-git add .
-git commit -m "w01: estrutura, estudo e fluxo minimo"
-git tag w01-ambiente-v1.0
-```
-Necessário configurar `git config user.name` e `git config user.email` caso ainda não estejam definidos.
+## 3. Execução do projeto
 
-### Próximos passos
-1. Receber especificação funcional das interfaces.
-2. Alinhar nomes e larguras de sinais com a trilha de Design Verification.
-3. Definir arquitetura e mapa de registradores na Semana 2.
+Os comandos abaixo são destinados ao ambiente do laboratório da UFCG, com as ferramentas Synopsys disponíveis.
+
+**Carregar o ambiente Synopsys:**
+
+`source /Tools/synopsys-scripts/snps.sh`
+
+**Executar o fluxo na raiz do projeto:**
+
+`make`
+
+O Makefile realiza a análise de sintaxe e lint básico com Vlogan, a compilação com VCS e a simulação funcional.
+
+**Resultado esperado:**
+
+`PASS: reset, contagem e enable validados.`
+
+Para remover os arquivos gerados, utilize:
+
+`make clean`
+
+## 4. Resultados da Semana 1
+
+| Verificação | Resultado |
+|---|---|
+| Análise de sintaxe | Aprovada |
+| Lint básico | 0 erros e 4 avisos |
+| Compilação com VCS | Aprovada |
+| Simulação funcional | PASS |
+| Teste em clone limpo | Aprovado com ressalva |
+
+Os quatro avisos de lint foram identificados no testbench. No teste em clone limpo, houve uma falha na gravação do arquivo VCD, que não impediu a conclusão da simulação funcional.
+
+## 5. Estrutura do projeto
+
+- `rtl/`: módulos RTL em SystemVerilog.
+- `tb/`: testbenches.
+- `docs/spec/`: documentos de especificação.
+- `docs/architecture/`: documentação da arquitetura.
+- `docs/reports/`: estudos, relatórios e evidências.
+- `models/`: modelos auxiliares.
+- `syn/`: arquivos de síntese.
+- `formal/`: verificação formal.
+- `upf/`: intenção de baixo consumo.
+
+## 6. Documentação
+
+- `docs/reports/estudo_aes_spi.md`: estudo introdutório sobre AES e SPI.
+- `docs/reports/semana_01.md`: relatório de execução da Semana 1.
+- `docs/reports/evidencias/resultados_semana01.md`: resumo das evidências de validação.
+
+Os logs completos são gerados na pasta `build/`, excluída do versionamento.
+
+## 7. Próximos passos
+
+Na Semana 2, serão desenvolvidas as definições de arquitetura e microarquitetura, interfaces, mapa de registradores e estratégias de clock, reset e travessia entre domínios de clock (CDC).

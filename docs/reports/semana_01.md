@@ -40,7 +40,7 @@ Preparar o ambiente de desenvolvimento RTL, organizar o repositório Git e valid
 | Compilação e elaboração com VCS | Aprovadas |
 | Simulação funcional | PASS |
 | Execução automatizada com `make` | Aprovada na sessão configurada |
-| Execução a partir de clone limpo | Pendente |
+| Execução a partir de clone limpo | Aprovada, com ressalva na geração do VCD |
 
 ### 4.1. Lint
 
@@ -87,8 +87,6 @@ Os arquivos acima são gerados localmente e estão excluídos do versionamento p
 ## 6. Pendências da Semana 1
 
 - Preservar as evidências necessárias no repositório.
-- Validar o fluxo a partir de um clone limpo.
-- Revisar o relatório de estudo sobre AES e SPI.
 - Criar o commit final e a tag `w01-ambiente-v1.0`.
 
 ## 7. Próximos passos — Semana 2
@@ -99,3 +97,10 @@ Os arquivos acima são gerados localmente e estão excluídos do versionamento p
 - Definir o mapa de registradores.
 - Estabelecer as estratégias de clock, reset e CDC.
 - Selecionar e justificar a microarquitetura do núcleo AES.
+## 8. Observação sobre a geração de formas de onda
+
+Durante a simulação realizada a partir do clone limpo, foi apresentada a mensagem `Can't write to dump file build/counter_demo.vcd`.
+
+O problema está relacionado ao caminho utilizado para gravar o arquivo VCD. Apesar desse aviso, a simulação funcional foi concluída com sucesso, apresentando a mensagem `PASS: reset, contagem e enable validados.`
+
+A correção da geração do VCD e a visualização gráfica das formas de onda ficam registradas como melhorias futuras.
