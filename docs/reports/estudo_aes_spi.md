@@ -10,11 +10,11 @@
 
 O *Advanced Encryption Standard* (AES) é um padrão de criptografia simétrica adotado pelo NIST em 2001 para substituir o DES. O AES se baseia no algoritmo Rijndael e utiliza uma chave secreta compartilhada para realizar a cifragem e a decifragem. Seu processamento ocorre em blocos de **128 bits**, independentemente do tamanho da chave, que pode ser de 128, 192 ou 256 bits [1].
 
-Neste projeto, o objetivo é desenvolver gradualmente um **acelerador AES descrito em SystemVerilog**, configurado e controlado por uma interface **SPI (*Serial Peripheral Interface*)**. A arquitetura geral inclui, além do núcleo criptográfico, blocos de reset, geração de clock e movimentação de dados com memória. O escopo da **Semana 1** é estudar esses conceitos e preparar o ambiente: **o núcleo AES e a SPI**.
+Neste projeto, o objetivo é desenvolver gradualmente um **acelerador AES descrito em SystemVerilog**, configurado e controlado por uma interface **SPI (*Serial Peripheral Interface*)**. A arquitetura geral inclui, além do núcleo criptográfico, blocos de reset, geração de clock e movimentação de dados com memória.
 
 ![Arquitetura-base do sistema AES com SPI, reset, PLL e subsistema de memória](images/arquitetura_aes.png)
 
-*Figura 1 — Arquitetura-base AES Top-Level System, .*
+*Figura 1 — Arquitetura-base AES Top-Level System.*
 
 ## 2. Objetivos do estudo
 
@@ -100,9 +100,6 @@ A SPI (*Serial Peripheral Interface*) é uma interface de comunicação serial s
 
 No contexto deste projeto, o circuito AES atuará como **periférico SPI**, recebendo comandos de configuração e oferecendo informações de controle ou estado. A forma exata dos comandos e dos registradores dependerá da especificação funcional.
 
-![Conexão básica entre controlador e periférico SPI](images/spi_mestre_periferico.png)
-
-*Figura 3 — Conexão básica SPI; figura reproduzida do material de estudo enviado, originalmente associada à nota AN-1248 da Analog Devices [3].*
 
 ### 4.2. Sinais principais
 
@@ -133,19 +130,19 @@ Dois parâmetros determinam quais bordas do clock são utilizadas para atualizar
 
 *Tabela 4 — Convenção usual dos quatro modos SPI [2, 3]. A borda de atualização dos dados é, em geral, a oposta à de amostragem.*
 
-É necessário que os dois lados da comunicação utilizem modos compatíveis. **Ainda não está estabelecido qual modo SPI será exigido para o acelerador**, pois essa escolha depende da especificação funcional do instrutor.
+É necessário que os dois lados da comunicação utilizem modos compatíveis. 
 
 ## 5. Relação entre AES, SPI e a arquitetura RTL
 
 A SPI e o AES possuem responsabilidades distintas: **a SPI configura e controla**, enquanto **o núcleo AES processa os blocos de dados**. O sistema proposto inclui também a interface de memória/dados, os circuitos de inicialização e a geração de clock.
 
-A arquitetura apresentada no material do projeto prevê que a lógica de deslocamento e recepção SPI opere no domínio de **SCLK**, enquanto o banco de registradores e o núcleo AES operem no domínio do clock do sistema. Dessa forma, a futura implementação deverá tratar a **travessia entre domínios de clock (CDC)**. Essa definição será detalhada na Semana 2, e a verificação correspondente ocorrerá na integração.
+A arquitetura apresentada no material do projeto prevê que a lógica de deslocamento e recepção SPI opere no domínio de **SCLK**, enquanto o banco de registradores e o núcleo AES operem no domínio do clock do sistema. Dessa forma, a futura implementação deverá tratar a **travessia entre domínios de clock (CDC)**.
 
-A escolha da microarquitetura — por exemplo, processamento iterativo por rodada — deverá considerar área, latência, frequência e, mais adiante, oportunidades de baixo consumo. **Nenhuma dessas soluções está implementada nesta primeira semana.**
+A escolha da microarquitetura — por exemplo, processamento iterativo por rodada — deverá considerar área, latência, frequência e, mais adiante, oportunidades de baixo consumo.
 
 ## 6. Síntese do estudo e continuidade
 
-O estudo permitiu identificar os fundamentos necessários para a próxima fase: as operações do AES, os sinais e modos da SPI e as funções gerais de cada bloco do sistema. A Semana 2 será dedicada à definição de arquitetura, interfaces, mapa de registradores e estratégias de clock e reset, a partir da especificação fornecida pelo instrutor.
+O estudo permitiu identificar os fundamentos necessários para a próxima fase: as operações do AES, os sinais e modos da SPI e as funções gerais de cada bloco do sistema. A Semana 2 será dedicada à definição de arquitetura, interfaces, mapa de registradores e estratégias de clock e reset.
 
 Este documento registra **o estudo conceitual**, não resultados de uma implementação do núcleo AES. As atividades práticas de configuração do Git, Makefile, Vlogan e VCS são documentadas separadamente em [`semana_01.md`](semana_01.md).
 
