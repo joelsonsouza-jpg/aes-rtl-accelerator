@@ -10,11 +10,11 @@
 
 O *Advanced Encryption Standard* (AES) é um padrão de criptografia simétrica adotado pelo NIST em 2001 para substituir o DES. O AES se baseia no algoritmo Rijndael e utiliza uma chave secreta compartilhada para realizar a cifragem e a decifragem. Seu processamento ocorre em blocos de **128 bits**, independentemente do tamanho da chave, que pode ser de 128, 192 ou 256 bits [1].
 
-Neste projeto, o objetivo é desenvolver gradualmente um **acelerador AES descrito em SystemVerilog**, configurado e controlado por uma interface **SPI (*Serial Peripheral Interface*)**. A arquitetura geral inclui, além do núcleo criptográfico, blocos de reset, geração de clock e movimentação de dados com memória. O escopo da **Semana 1** é estudar esses conceitos e preparar o ambiente: **o núcleo AES e a SPI ainda não foram implementados**.
+Neste projeto, o objetivo é desenvolver gradualmente um **acelerador AES descrito em SystemVerilog**, configurado e controlado por uma interface **SPI (*Serial Peripheral Interface*)**. A arquitetura geral inclui, além do núcleo criptográfico, blocos de reset, geração de clock e movimentação de dados com memória. O escopo da **Semana 1** é estudar esses conceitos e preparar o ambiente: **o núcleo AES e a SPI**.
 
 ![Arquitetura-base do sistema AES com SPI, reset, PLL e subsistema de memória](images/arquitetura_aes.png)
 
-*Figura 1 — Arquitetura-base AES Top-Level System, fornecida no material do projeto. Representação preliminar; as interfaces definitivas dependem da especificação funcional do instrutor.*
+*Figura 1 — Arquitetura-base AES Top-Level System, .*
 
 ## 2. Objetivos do estudo
 
@@ -42,7 +42,7 @@ Na criptografia simétrica, emissor e receptor utilizam a mesma chave secreta pa
 
 *Tabela 1 — Características das variantes padronizadas do AES [1].*
 
-O aumento do tamanho da chave altera o número de rodadas e os requisitos de implementação. A variante que será implementada neste projeto deverá ser confirmada na especificação funcional fornecida pelo instrutor.
+O aumento do tamanho da chave altera o número de rodadas e os requisitos de implementação. 
 
 ### 3.2. Organização do estado
 
@@ -90,7 +90,7 @@ flowchart TD
 
 O AES não reutiliza a chave original de maneira idêntica em todas as rodadas. Um procedimento chamado **expansão de chave** (*key expansion* ou *key schedule*) produz as chaves de rodada necessárias ao processamento [1].
 
-Em hardware, essa função poderá ser implementada como lógica específica de geração ou armazenamento das chaves de rodada, conforme a microarquitetura definida na Semana 2. Ainda não há decisão final sobre essa implementação.
+Em hardware, essa função poderá ser implementada como lógica específica de geração ou armazenamento das chaves de rodada, conforme a microarquitetura.
 
 ## 4. Fundamentos da comunicação SPI
 
