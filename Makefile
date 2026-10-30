@@ -91,4 +91,28 @@ help:
 	@echo "make clean     - Limpar build"
 	@echo "make          - Executar fluxo completo"
 
+
+# ==========================================
+# Semana 02 - Transformacoes AES
+# ==========================================
+
+test_w02:
+	mkdir -p build/aes_w02
+	cd build/aes_w02 && vlogan -full64 -sverilog -kdb +lint=all \
+		-timescale=1ns/1ps \
+		../../rtl/minisoc_aes/minisoc_aes_sbox.sv \
+		../../rtl/minisoc_aes/minisoc_aes_sub_bytes.sv \
+		../../rtl/minisoc_aes/minisoc_aes_shift_rows.sv \
+		../../tb/tb_minisoc_aes_transform.sv \
+		-l syntax.log
+	cd build/aes_w02 && vcs -full64 -timescale=1ns/1ps -kdb \
+		-top tb_minisoc_aes_transform \
+		-o simv -l compile.log
+	cd build/aes_w02 && ./simv -no_save -l simulation.log
+	grep -Fq "PASS: Todos os testes AES da Semana 2" build/aes_w02/simulation.log
+
+.PHONY: test_w02
+
+
+
 .PHONY: all syntax compile run clean_sim clean help
