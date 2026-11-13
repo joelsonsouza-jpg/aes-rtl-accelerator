@@ -124,3 +124,49 @@ test_w03:
 	grep -Fq "PASS: Testes iniciais da Semana 3" build/aes_w03/round/simulation.log
 
 .PHONY: all syntax compile run clean_sim clean help test_w02 test_w03
+
+# ==========================================
+# Semana 04 - AES-128 completo
+# ==========================================
+
+test_w04: test_w04_key_exp test_w04_dp
+
+# Expansao de chave
+test_w04_key_exp:
+	mkdir -p build/aes_w04/key_exp
+	cd build/aes_w04/key_exp && vlogan $(VLOGAN_FLAGS) \
+		-timescale=$(TIMESCALE) \
+		../../../rtl/minisoc_aes/minisoc_aes_sbox.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_key_exp.sv \
+		../../../tb/tb_minisoc_aes_key_exp.sv \
+		-l syntax.log
+	cd build/aes_w04/key_exp && vcs $(VCS_FLAGS) \
+		-top tb_minisoc_aes_key_exp \
+		-o simv -l compile.log
+	cd build/aes_w04/key_exp && ./simv -no_save -l simulation.log
+	grep -Fq "PASS: Testes da expansao de chave" build/aes_w04/key_exp/simulation.log
+
+# Cifragem e decifragem AES-128
+test_w04_dp:
+	mkdir -p build/aes_w04/datapath
+	cd build/aes_w04/datapath && vlogan $(VLOGAN_FLAGS) \
+		-timescale=$(TIMESCALE) \
+		../../../rtl/minisoc_aes/minisoc_aes_sbox.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_sub_bytes.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_shift_rows.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_mix_columns.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_add_round_key.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_shift_rows.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_sub_bytes.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_mix_columns.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_key_exp.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_dp.sv \
+		../../../tb/tb_minisoc_aes_dp.sv \
+		-l syntax.log
+	cd build/aes_w04/datapath && vcs $(VCS_FLAGS) \
+		-top tb_minisoc_aes_dp \
+		-o simv -l compile.log
+	cd build/aes_w04/datapath && ./simv -no_save -l simulation.log
+	grep -Fq "PASS: Todos os testes da Semana 4" build/aes_w04/datapath/simulation.log
+
+.PHONY: test_w04 test_w04_key_exp test_w04_dp
