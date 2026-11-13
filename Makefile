@@ -1,6 +1,6 @@
 
 # ==========================================
-# Projeto AES RTL - Semana 01
+# Projeto AES RTL
 # ==========================================
 
 # ==========================================
@@ -12,7 +12,7 @@ BUILD_DIR = build
 SYNTH_DIR = syn
 
 # ==========================================
-# Arquivos RTL
+# Arquivos RTL - Semana 01
 # ==========================================
 RTL_FILES = \
 	$(RTL_DIR)/counter_demo.sv
@@ -40,13 +40,10 @@ VCS_FLAGS = -full64 \
             -kdb
 
 # ==========================================
-# Fluxo principal
+# Fluxo principal - Semana 01
 # ==========================================
 all: run
 
-# ==========================================
-# Verificacao de sintaxe e lint
-# ==========================================
 syntax:
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) && vlogan $(VLOGAN_FLAGS) \
@@ -54,46 +51,38 @@ syntax:
 		../$(TB_FILES) \
 		-l syntax.log
 
-# ==========================================
-# Compilacao / Elaboracao
-# ==========================================
 compile: syntax
 	cd $(BUILD_DIR) && vcs $(VCS_FLAGS) \
 		-top $(TOP) \
 		-o simv \
 		-l compile.log
 
-# ==========================================
-# Simulacao
-# ==========================================
 run: compile
 	cd $(BUILD_DIR) && ./simv -no_save -l simulation.log
 	grep -q "PASS: reset, contagem e enable validados." $(BUILD_DIR)/simulation.log
 
 # ==========================================
-# Limpeza da simulacao
+# Limpeza
 # ==========================================
 clean_sim:
 	rm -rf $(BUILD_DIR)
 
-# ==========================================
-# Limpeza total
-# ==========================================
 clean: clean_sim
 
 # ==========================================
 # Ajuda
 # ==========================================
 help:
+	@echo "make           - Executar Semana 01"
+	@echo "make test_w02  - Executar Semana 02"
+	@echo "make test_w03  - Executar Semana 03"
 	@echo "make syntax    - Sintaxe e lint basico"
 	@echo "make compile   - Compilacao com VCS"
 	@echo "make run       - Executar simulacao"
 	@echo "make clean     - Limpar build"
-	@echo "make          - Executar fluxo completo"
-
 
 # ==========================================
-# Semana 02 - Transformacoes AES
+# Semana 02 - S-box, SubBytes e ShiftRows
 # ==========================================
 
 test_w02:
@@ -111,8 +100,27 @@ test_w02:
 	cd build/aes_w02 && ./simv -no_save -l simulation.log
 	grep -Fq "PASS: Todos os testes AES da Semana 2" build/aes_w02/simulation.log
 
-.PHONY: test_w02
+# ==========================================
+# Semana 03 - Transformacoes AES
+# ==========================================
 
+test_w03:
+	mkdir -p build/aes_w03/round
+	cd build/aes_w03/round && vlogan -full64 -sverilog -kdb +lint=all \
+		-timescale=1ns/1ps \
+		../../../rtl/minisoc_aes/minisoc_aes_sbox.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_sub_bytes.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_add_round_key.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_mix_columns.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_shift_rows.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_sub_bytes.sv \
+		../../../rtl/minisoc_aes/minisoc_aes_inv_mix_columns.sv \
+		../../../tb/tb_minisoc_aes_round.sv \
+		-l syntax.log
+	cd build/aes_w03/round && vcs -full64 -timescale=1ns/1ps -kdb \
+		-top tb_minisoc_aes_round \
+		-o simv -l compile.log
+	cd build/aes_w03/round && ./simv -no_save -l simulation.log
+	grep -Fq "PASS: Testes iniciais da Semana 3" build/aes_w03/round/simulation.log
 
-
-.PHONY: all syntax compile run clean_sim clean help
+.PHONY: all syntax compile run clean_sim clean help test_w02 test_w03
